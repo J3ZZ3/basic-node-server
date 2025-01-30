@@ -20,6 +20,20 @@ const routes = {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({ message: 'This is the contact page.' }));
+    },
+    '/data': (req, res) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({
+        message: 'Here is your data',
+        data: {
+          items: [
+            { id: 1, name: 'Item 1' },
+            { id: 2, name: 'Item 2' },
+            { id: 3, name: 'Item 3' }
+          ]
+        }
+      }));
     }
   },
   'POST': {
