@@ -48,19 +48,81 @@ const routes = {
         res.end(JSON.stringify({ message: 'Data received', data: body }));
       });
     }
+  },
+  'PUT': {
+    '/data': (req, res) => {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+      req.on('end', () => {
+        try {
+          const parsedBody = JSON.parse(body);
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ 
+            message: 'Data updated successfully', 
+            data: parsedBody 
+          }));
+        } catch (error) {
+          handleError(res, 400, 'Invalid JSON format');
+        }
+      });
+    }
+  },
+  'PATCH': {
+    '/data': (req, res) => {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+      req.on('end', () => {
+        try {
+          const parsedBody = JSON.parse(body);
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ 
+            message: 'Data patched successfully', 
+            data: parsedBody 
+          }));
+        } catch (error) {
+          handleError(res, 400, 'Invalid JSON format');
+        }
+      });
+    }
+  },
+  'DELETE': {
+    '/data': (req, res) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ 
+        message: 'Resource deleted successfully' 
+      }));
+    }
   }
 };
 
-const server = http.createServer((req, res) => {
-  const parsedUrl = url.parse(req.url, true);
-  const routeHandler = routes[req.method]?.[parsedUrl.pathname];
+// Add this helper function for error handling
+const handleError = (res, statusCode, message) => {
+  res.statusCode = statusCode;
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify({ 
+    error: message 
+  }));
+};
 
-  if (routeHandler) {
-    routeHandler(req, res);
-  } else {
-    res.statusCode = 404;
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ error: 'Not Found' }));
+const server = http.createServer((req, res) => {
+  try {
+    const parsedUrl = url.parse(req.url, true);
+    const routeHandler = routes[req.method]?.[parsedUrl.pathname];
+
+    if (routeHandler) {
+      routeHandler(req, res);
+    } else {
+      handleError(res, 404, 'Not Found');
+    }
+  } catch (error) {
+    handleError(res, 500, 'Internal Server Error');
   }
 });
 
