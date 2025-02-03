@@ -34,19 +34,95 @@ The server runs on `http://127.0.0.1:3000` by default.
   - Description: Contact page
   - Response: `{ "message": "This is the contact page." }`
 
+- `GET /data`
+  - Description: Retrieves sample data
+  - Response: 
+    ```json
+    {
+      "message": "Here is your data",
+      "data": {
+        "items": [
+          { "id": 1, "name": "Item 1" },
+          { "id": 2, "name": "Item 2" },
+          { "id": 3, "name": "Item 3" }
+        ]
+      }
+    }
+    ```
+
 #### POST Endpoints
 
 - `POST /data`
   - Description: Accepts data submissions
-  - Request: Any data in request body
+  - Request: JSON data in request body
   - Response: `{ "message": "Data received", "data": "<submitted-data>" }`
+
+#### PUT Endpoints
+
+- `PUT /data`
+  - Description: Updates entire resource
+  - Request: JSON data in request body
+  - Validation:
+    - Request body cannot be empty
+    - No fields can be empty strings or null
+  - Response: `{ "message": "Data updated successfully", "data": "<updated-data>" }`
+
+#### PATCH Endpoints
+
+- `PATCH /data`
+  - Description: Partially updates resource
+  - Request: JSON data in request body
+  - Validation:
+    - Request body cannot be empty
+    - No fields can be empty strings or null
+  - Response: `{ "message": "Data patched successfully", "data": "<patched-data>" }`
+
+#### DELETE Endpoints
+
+- `DELETE /data`
+  - Description: Deletes the resource
+  - Response: `{ "message": "Resource deleted successfully" }`
 
 ### Error Handling
 
-- Any undefined routes will return a 404 response:
+The server includes comprehensive error handling:
+
+- 404 Not Found:
   ```json
   {
     "error": "Not Found"
   }
   ```
+
+- 400 Bad Request (Invalid JSON):
+  ```json
+  {
+    "error": "Invalid JSON format"
+  }
+  ```
+
+- 400 Bad Request (Empty Data):
+  ```json
+  {
+    "error": "Request body cannot be empty"
+  }
+  ```
+
+- 400 Bad Request (Empty Fields):
+  ```json
+  {
+    "error": "Field 'fieldName' cannot be empty"
+  }
+  ```
+
+- 500 Internal Server Error:
+  ```json
+  {
+    "error": "Internal Server Error"
+  }
+  ```
+
+## Content Type
+
+All endpoints return responses with `Content-Type: application/json`.
 
