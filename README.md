@@ -6,7 +6,10 @@ A simple HTTP server built with Node.js native `http` module that handles differ
 
 1. Make sure you have Node.js installed on your system
 2. Clone this repository
-3. Run the server:
+   ```bash
+   git clone https://github.com/J3ZZ3/basic-node-server.git
+   ```
+4. Run the server:
 
 ```bash
 node server.js
