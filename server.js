@@ -58,6 +58,17 @@ const routes = {
       req.on('end', () => {
         try {
           const parsedBody = JSON.parse(body);
+          
+          if (!parsedBody || Object.keys(parsedBody).length === 0) {
+            return handleError(res, 400, 'Request body cannot be empty');
+          }
+
+          for (const [key, value] of Object.entries(parsedBody)) {
+            if (value === '' || value === null) {
+              return handleError(res, 400, `Field '${key}' cannot be empty`);
+            }
+          }
+
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');
           res.end(JSON.stringify({ 
@@ -79,6 +90,17 @@ const routes = {
       req.on('end', () => {
         try {
           const parsedBody = JSON.parse(body);
+          
+          if (!parsedBody || Object.keys(parsedBody).length === 0) {
+            return handleError(res, 400, 'Request body cannot be empty');
+          }
+
+          for (const [key, value] of Object.entries(parsedBody)) {
+            if (value === '' || value === null) {
+              return handleError(res, 400, `Field '${key}' cannot be empty`);
+            }
+          }
+
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');
           res.end(JSON.stringify({ 
@@ -102,7 +124,6 @@ const routes = {
   }
 };
 
-// Add this helper function for error handling
 const handleError = (res, statusCode, message) => {
   res.statusCode = statusCode;
   res.setHeader('Content-Type', 'application/json');
